@@ -28,6 +28,7 @@ data class Data(val args: Map<String, Any?>) {
     var from: String = ""
 
     var logo: String
+	var backgroundImage: String
     var notificationIcon: String
     var showCallBackAction: Boolean = true
     var ringtoneFileName: String
@@ -42,6 +43,7 @@ data class Data(val args: Map<String, Any?>) {
         val android: HashMap<String, Any?>? = args["android"] as? HashMap<String, Any?>?
         if (android != null) {
             logo = (android["logo"] as? String) ?: ""
+            backgroundImage = (android["backgroundImage"] as? String) ?: ""
             notificationIcon = (android["notificationIcon"] as? String) ?: ""
             showCallBackAction = (android["showCallBackAction"] as? Boolean) ?: true
             ringtoneFileName = (android["ringtoneFileName"] as? String) ?: ""
@@ -52,6 +54,7 @@ data class Data(val args: Map<String, Any?>) {
             missedCallNotificationChannelName = android["missedCallNotificationChannelName"] as? String
         } else {
             logo = (args["logo"] as? String) ?: ""
+            backgroundImage = (args["backgroundImage"] as? String) ?: ""
             notificationIcon = (args["notificationIcon"] as? String) ?: ""
             showCallBackAction = (args["showCallBackAction"] as? Boolean) ?: true
             ringtoneFileName = (args["ringtoneFileName"] as? String) ?: ""
@@ -91,6 +94,10 @@ data class Data(val args: Map<String, Any?>) {
         bundle.putString(
                 CallKeepBroadcastReceiver.EXTRA_CALLKEEP_LOGO,
                 logo
+        )
+        bundle.putString(
+                CallKeepBroadcastReceiver.EXTRA_CALLKEEP_BACKGROUND_IMAGE,
+                backgroundImage
         )
         bundle.putBoolean(
                 CallKeepBroadcastReceiver.EXTRA_CALLKEEP_SHOW_CALLBACK,
@@ -153,6 +160,10 @@ data class Data(val args: Map<String, Any?>) {
 
             data.logo = bundle.getString(
                     CallKeepBroadcastReceiver.EXTRA_CALLKEEP_LOGO,
+                    ""
+            )
+            data.backgroundImage = bundle.getString(
+                    CallKeepBroadcastReceiver.EXTRA_CALLKEEP_BACKGROUND_IMAGE,
                     ""
             )
             data.showCallBackAction = bundle.getBoolean(

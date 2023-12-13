@@ -4,72 +4,104 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF">
 
+	<ImageView
+		android:id="@+id/ivBackgroundImage"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_centerInParent="true"
+		android:scaleType="centerCrop" />
+
     <LinearLayout
         android:id="@+id/llBackground"
         android:paddingBottom="50dp"
         android:background="@color/incoming_call_bg_color"
         android:orientation="vertical"
         android:layout_width="match_parent"
+		android:gravity="center"
         android:layout_height="wrap_content">
+
+		 <ImageView
+			android:id="@+id/ivLogo"
+			android:layout_width="match_parent"
+			android:layout_height="36dp"
+			android:src="@drawable/ic_logo"
+			android:visibility="visible"
+			android:gravity="center"
+			android:layout_marginTop="64dp"
+			android:layout_centerHorizontal="true"
+			android:layout_centerVertical="true"
+			/>
+
+		<de.hdodenhof.circleimageview.CircleImageView
+			android:id="@+id/ivAvatar"
+			android:layout_width="@dimen/size_avatar"
+			android:layout_height="@dimen/size_avatar"
+			android:layout_centerInParent="true"
+			android:layout_marginTop="28dp"
+			android:visibility="visible"
+			android:src="@drawable/ic_default_avatar"
+			xmlns:app="http://schemas.android.com/apk/res-auto"
+			app:civ_border_color="#F5F5F5"
+			app:civ_border_width="6dp" />
+
         <TextView
             android:id="@+id/tvCallerName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="108dp"
+            android:layout_marginTop="32dp"
             android:gravity="center"
+			android:textFontWeight="500"
             android:text="Förnamn Efternamn"
             android:textAppearance="@android:style/TextAppearance.Material.Display1"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/black" />
 
         <TextView
             android:id="@+id/tvCallHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="12dp"
             android:gravity="center"
             android:text="@string/call_header"
             android:textAppearance="@android:style/TextAppearance.Material.Medium"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/black" />
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/ivLogo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_logo"
-        android:visibility="invisible"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        />
+   
 
     <Button
         android:id="@+id/btnAnswer"
-        android:layout_width="120dp"
-        android:layout_height="70dp"
+        android:layout_width="wrap_content"
+		android:layout_height="48dp"
         android:background="@drawable/answer_background"
-        android:drawableTop="@drawable/ic_accept"
-        android:paddingTop="10dp"
+        android:drawableStart="@drawable/ic_accept"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="25dp"
-        android:layout_marginBottom="60dp"
-        android:text="@string/accept_text"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="80dp"
+		android:paddingStart="20dp"
+		android:paddingEnd="20dp"
+		android:drawablePadding="8dp"
+		android:text="@string/accept_text"
+		android:textFontWeight="600"
         android:textColor="#fff"
         />
 
     <Button
         android:id="@+id/btnDecline"
-        android:layout_width="120dp"
-        android:layout_height="70dp"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
         android:background="@drawable/decline_background"
-        android:drawableTop="@drawable/ic_decline"
-        android:paddingTop="10dp"
+        android:drawableLeft="@drawable/ic_decline"
+		android:drawablePadding="8dp"
+		android:paddingStart="20dp"
+		android:paddingEnd="20dp"
+        android:gravity="center"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="45dp"
         android:text="@string/decline_text"
         android:textColor="#fff"
-        android:layout_marginStart="25dp"
-        android:layout_marginBottom="60dp"
+		android:textFontWeight="600"
+		android:layout_marginStart="32dp"
+        android:layout_marginBottom="80dp"
         />
 </RelativeLayout>

@@ -43,6 +43,7 @@ class CallKeepBroadcastReceiver : BroadcastReceiver() {
         const val EXTRA_CALLKEEP_EXTRA = "EXTRA_CALLKEEP_EXTRA"
         const val EXTRA_CALLKEEP_HEADERS = "EXTRA_CALLKEEP_HEADERS"
         const val EXTRA_CALLKEEP_LOGO = "EXTRA_CALLKEEP_LOGO"
+        const val EXTRA_CALLKEEP_BACKGROUND_IMAGE = "EXTRA_CALLKEEP_BACKGROUND_IMAGE"
         const val EXTRA_CALLKEEP_NOTIFICATION_ICON = "EXTRA_CALLKEEP_NOTIFICATION_ICON"
         const val EXTRA_CALLKEEP_SHOW_MISSED_CALL_NOTIFICATION = "EXTRA_CALLKEEP_SHOW_MISSED_CALL_NOTIFICATION"
         const val EXTRA_CALLKEEP_SHOW_CALLBACK = "EXTRA_CALLKEEP_SHOW_CALLBACK"
@@ -189,7 +190,7 @@ class CallKeepBroadcastReceiver : BroadcastReceiver() {
     private fun sendEventFlutter(event: String, bundle: Bundle) {
         CallKeepPlugin.sendEvent(event, bundle.toData())
     }
-    
+
     @Suppress("UNCHECKED_CAST")
     private fun Bundle.toData(): Map<String, Any> {
         val android = mapOf(

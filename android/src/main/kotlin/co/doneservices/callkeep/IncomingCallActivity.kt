@@ -34,6 +34,7 @@ import co.doneservices.callkeep.CallKeepBroadcastReceiver.Companion.EXTRA_CALLKE
 import co.doneservices.callkeep.CallKeepBroadcastReceiver.Companion.EXTRA_CALLKEEP_HANDLE
 import co.doneservices.callkeep.CallKeepBroadcastReceiver.Companion.EXTRA_CALLKEEP_HEADERS
 import co.doneservices.callkeep.CallKeepBroadcastReceiver.Companion.EXTRA_CALLKEEP_LOGO
+import co.doneservices.callkeep.CallKeepBroadcastReceiver.Companion.EXTRA_CALLKEEP_BACKGROUND_IMAGE
 import co.doneservices.callkeep.CallKeepBroadcastReceiver.Companion.EXTRA_CALLKEEP_HAS_VIDEO
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
@@ -86,6 +87,9 @@ class IncomingCallActivity : Activity() {
     private lateinit var tvCallerName: TextView
     private lateinit var tvCallHeader: TextView
     private lateinit var ivLogo: ImageView
+    private lateinit var ivBackgroundImage: ImageView
+	private lateinit var ivAvatar: CircleImageView
+
 
     private lateinit var btnAnswer: Button
 
@@ -107,10 +111,18 @@ class IncomingCallActivity : Activity() {
         setContentView(R.layout.activity_call_incoming)
         initView()
         updateViewWithIncomingIntentData(intent)
-        registerReceiver(
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+			registerReceiver(
+                endedCallKeepBroadcastReceiver,
+                IntentFilter(ACTION_ENDED_CALL_INCOMING),
+                Context.RECEIVER_EXPORTED,
+            )
+        } else {
+            registerReceiver(
                 endedCallKeepBroadcastReceiver,
                 IntentFilter(ACTION_ENDED_CALL_INCOMING)
-        )
+            )
+        }
     }
 
     private fun wakeLockRequest(duration: Long) {
@@ -172,6 +184,23 @@ class IncomingCallActivity : Activity() {
         }
         ivLogo.visibility = if (logo?.isNotEmpty() == true) View.VISIBLE else View.INVISIBLE
 
+        val backgroundImage = data?.getString(EXTRA_CALLKEEP_BACKGROUND_IMAGE, "")
+		if(backgroundImage?.isNotEmpty() == true){
+            val identifier = this.resources.getIdentifier(backgroundImage, "drawable", this.packageName)
+            ivBackgroundImage.setImageResource(identifier)
+        }
+        ivBackgroundImage.visibility = if (backgroundImage?.isNotEmpty() == true) View.VISIBLE else View.INVISIBLE
+
+		val avatarUrl = data?.getString(EXTRA_CALLKEEP_AVATAR, "")
+        if (avatarUrl?.isNotEmpty() ==true) {
+            ivAvatar.visibility = View.VISIBLE
+            val headers = data.getSerializable(EXTRA_CALLKEEP_HEADERS) as HashMap<String, Any?>
+            getPicassoInstance(this@IncomingCallActivity, headers)
+                    .load(avatarUrl)
+                    .placeholder(R.drawable.ic_default_avatar)
+                    .error(R.drawable.ic_default_avatar)
+                    .into(ivAvatar)
+        }
 
         val hasVideo = data?.getBoolean(EXTRA_CALLKEEP_HAS_VIDEO, false) ?: false
         if (hasVideo) {
@@ -215,6 +244,8 @@ class IncomingCallActivity : Activity() {
         tvCallerName = findViewById(R.id.tvCallerName)
         tvCallHeader = findViewById(R.id.tvCallHeader)
         ivLogo = findViewById(R.id.ivLogo)
+        ivBackgroundImage = findViewById(R.id.ivBackgroundImage)
+        ivAvatar = findViewById(R.id.ivAvatar)
 
         btnAnswer = findViewById(R.id.btnAnswer)
         btnDecline = findViewById(R.id.btnDecline)

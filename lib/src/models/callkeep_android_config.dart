@@ -7,6 +7,11 @@ class CallKeepAndroidConfig {
   /// No logo will be shown if this is empty
   final String logo;
 
+  /// No background image will be shown if empty.
+  ///
+  /// File must be in drawable
+  final String backgroundImage;
+
   /// File name of the notification icon to show inside call notifications.
   ///
   /// Default notifications will be shown if this is empty
@@ -36,6 +41,7 @@ class CallKeepAndroidConfig {
   final String missedCallNotificationChannelName;
   CallKeepAndroidConfig({
     this.logo = "",
+    this.backgroundImage = "",
     this.notificationIcon = "",
     this.showMissedCallNotification = true,
     this.showCallBackAction = true,
@@ -55,8 +61,8 @@ class CallKeepAndroidConfig {
       'ringtoneFileName': ringtoneFileName,
       'accentColor': accentColor,
       'backgroundUrl': backgroundUrl,
-      'incomingCallNotificationChannelName':
-          incomingCallNotificationChannelName,
+      'backgroundImage': backgroundImage,
+      'incomingCallNotificationChannelName': incomingCallNotificationChannelName,
       'missedCallNotificationChannelName': missedCallNotificationChannelName,
     };
   }
