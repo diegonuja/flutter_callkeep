@@ -1,5 +1,6 @@
 package co.doneservices.callkeep
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.KeyguardManager
@@ -9,6 +10,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -45,6 +47,8 @@ import android.view.ViewGroup.MarginLayoutParams
 import android.os.PowerManager
 import android.os.PowerManager.WakeLock
 import android.text.TextUtils
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import co.doneservices.callkeep.CallKeepBroadcastReceiver.Companion.EXTRA_CALLKEEP_ACCEPT_TEXT
 import co.doneservices.callkeep.CallKeepBroadcastReceiver.Companion.EXTRA_CALLKEEP_DECLINE_TEXT
 
@@ -94,6 +98,8 @@ class IncomingCallActivity : Activity() {
     private lateinit var btnAnswer: Button
 
     private lateinit var btnDecline: Button
+
+    private val RECORD_AUDIO_PERMISSION_CODE = 123
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -269,8 +275,23 @@ class IncomingCallActivity : Activity() {
 
 
     private fun onAcceptClick() {
-        val data = intent.extras?.getBundle(EXTRA_CALLKEEP_INCOMING_DATA)
+
+        // Request microphone permission, if user refuses, stop
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Request the permission
+            ActivityCompat.requestPermissions(this,
+                    arrayOf(Manifest.permission.RECORD_AUDIO),
+                    RECORD_AUDIO_PERMISSION_CODE)
+        } else {
+            acceptCall();
+        }
+    }
+
+    private fun acceptCall() {
+		val data = intent.extras?.getBundle(EXTRA_CALLKEEP_INCOMING_DATA)
         val intent = packageManager.getLaunchIntentForPackage(packageName)?.cloneFilter()
+
         if (isTaskRoot) {
             intent?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         } else {
@@ -293,6 +314,21 @@ class IncomingCallActivity : Activity() {
             finish()
         }
     }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
+                                            grantResults: IntArray) {
+        when (requestCode) {
+            RECORD_AUDIO_PERMISSION_CODE -> {
+                // If request is cancelled, the result arrays are empty
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    // Permission granted, initialize audio recording
+                    acceptCall()
+                }
+                return
+            }
+        }
+    }
+
 
     private fun onDeclineClick() {
         val data = intent.extras?.getBundle(EXTRA_CALLKEEP_INCOMING_DATA)
