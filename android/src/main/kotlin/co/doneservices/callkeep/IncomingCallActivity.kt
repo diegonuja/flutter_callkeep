@@ -111,16 +111,18 @@ class IncomingCallActivity : Activity() {
         setContentView(R.layout.activity_call_incoming)
         initView()
         updateViewWithIncomingIntentData(intent)
+
+		val intentName:String = "${applicationContext.packageName}.${ACTION_ENDED_CALL_INCOMING}";
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 			registerReceiver(
                 endedCallKeepBroadcastReceiver,
-                IntentFilter(ACTION_ENDED_CALL_INCOMING),
+                IntentFilter(intentName),
                 Context.RECEIVER_EXPORTED,
             )
         } else {
             registerReceiver(
                 endedCallKeepBroadcastReceiver,
-                IntentFilter(ACTION_ENDED_CALL_INCOMING)
+                IntentFilter(intentName)
             )
         }
     }
